@@ -38,6 +38,10 @@ html{
 
 /* Bouton ajouter une BD */
 
+p.bd-ajouter{
+    margin: 0;
+}
+
 .bd-ajouter{
     color: black;
     text-decoration: none;
