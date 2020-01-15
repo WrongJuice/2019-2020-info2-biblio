@@ -17,6 +17,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 {% for typeGenre in typesGenre %}
@@ -26,16 +28,17 @@
                     </a>
                     <div class="dropdown-menu header-sousmenu" aria-labelledby="navbarDropdown" >
                         {% for typeSousGenre in typesSousGenre %}
-                        <a class="dropdown-item text-light" href="{{ path('listeBDSousGenre', {'genre' : typeGenre, 'sousGenre' : typeSousGenre, 'page' : '1' }) }}" >{{ typeSousGenre }}</a>
-                        {% endfor %}
+                        <a class="dropdown-item text-light" href="{{ path('listeBDSousGenre', {'genre' : typeGenre, 'sousGenre' : typeSousGenre, 'page' : '1', 'tri': 'def' }) }}" >{{ typeSousGenre }}</a>
+                        {% endfor %}S
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-light" href="{{ path('listeBDTendances', {'genre' : typeGenre, 'page' : '1' }) }}">Les tendances </a>
-                        <a class="dropdown-item text-light" href="{{ path('listeBDGenre', {'genre' : typeGenre, 'page' : '1' }) }}">Voir tout </a>
+                        <a class="dropdown-item text-light" href="{{ path('listeBDGenre', {'genre' : typeGenre, 'page' : '1', 'tri': 'def' }) }}">Voir tout </a>
                     </div>
                 </li>
                 {% endfor %}
 
             </ul>
+
             <button type="button" class="btn btn-light" style="margin-right: 30px;" onclick="location.href='http://mpapws.loc:9999/formulaire'"><p class="bd-ajouter">Ajouter votre BD</p></button>
             <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="search" placeholder="Cherchez une BD" aria-label="Search">
@@ -44,10 +47,13 @@
         </div>
     </nav>
 
-    <div class="container">
-        {% block body %}{% endblock %}
 
-    {# Ajout d'une zone de pagination pour les pages si besoin est#}
+    <div class="container">
+
+        {% block body %}
+        {% endblock %}
+        
+        {# Ajout d'une zone de pagination pour les pages si besoin est#}
         {# 3 Types de redirection selon si c'est une liste Tendance, Sous-Genre ou Genre #}
     {% if pagination.nbPages is defined and pagination.nbPages > 1 and (( BandeDessinees is defined and BandeDessinees is not empty ) or ( BDTendances is defined and BDTendances is not empty )) %}
         {% if 'Tendances' in GenreToString %}
@@ -55,7 +61,7 @@
                 {% if pagination.page > 1 %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': genre })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': genre, 'tri': tri })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/back_pagination.png" alt="flèche retour">
                         </a>
                     </li>
@@ -73,7 +79,7 @@
                 {% if pagination.page < pagination.nbPages %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': genre })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': genre, 'tri': tri  })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/next_pagination.png" alt="flèche suivant">
                         </a>
                     </li>
@@ -85,7 +91,7 @@
                 {% if pagination.page > 1 %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': genre, 'sousGenre' : sousGenre })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': genre, 'sousGenre' : sousGenre, 'tri': tri })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/back_pagination.png" alt="flèche retour">
                         </a>
                     </li>
@@ -94,7 +100,7 @@
                 {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
                 {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
                     <li {% if p == pagination.page %}class="pagination-active"{% endif %}>
-                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': genre, 'sousGenre' : sousGenre})) }}" class="pagination-part">
+                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': genre, 'sousGenre' : sousGenre, 'tri': tri})) }}" class="pagination-part">
                             {{ p }}
                         </a>
                     </li>
@@ -103,7 +109,7 @@
                 {% if pagination.page < pagination.nbPages %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': genre, 'sousGenre' : sousGenre })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': genre, 'sousGenre' : sousGenre, 'tri': tri })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/next_pagination.png" alt="flèche suivant">
                         </a>
                     </li>
@@ -123,7 +129,7 @@
                 {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
                 {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
                     <li {% if p == pagination.page %}class="pagination-active"{% endif %}>
-                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': GenreToString})) }}" class="pagination-part">
+                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': GenreToString, 'tri': tri})) }}" class="pagination-part">
                             {{ p }}
                         </a>
                     </li>
@@ -132,7 +138,7 @@
                 {% if pagination.page < pagination.nbPages %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': GenreToString })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': GenreToString, 'tri': tri })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/next_pagination.png" alt="flèche suivant">
                         </a>
                     </li>

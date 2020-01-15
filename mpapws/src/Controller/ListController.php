@@ -43,16 +43,16 @@ class ListController extends AbstractController{
 
 
     /**
-     * @Route("/liste/{genre}/{page}", requirements={"page" = "\d+"}, name="listeBDGenre")
+     * @Route("/liste/{genre}/{page}/{tri}", requirements={"page" = "\d+"}, name="listeBDGenre")
      */
 
-    public function listeBDGenre($genre, $page, BDGenreHandler $BDGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre)
+    public function listeBDGenre($genre, $page, BDGenreHandler $BDGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri)
     {
         /* Récupère la liste des BD selon un genre */
 
         /* Crée un système de pagination avec 5 BD par page */
 
-        $bandeDessinees = $BDGenreHandler->handle(new BDGenreQuery($page, $nbArticlesParPage, $genre)); // Récupère les BD
+        $bandeDessinees = $BDGenreHandler->handle(new BDGenreQuery($page, $nbArticlesParPage, $genre, $tri)); // Récupère les BD
 
         $pagination = array(
             'page' => $page,
@@ -62,7 +62,7 @@ class ListController extends AbstractController{
         );
 
         // Si mauvais paramètre de route : 404
-        if(!in_array($genre, $typesGenre))
+        if(!in_array($genre, $typesGenre, $tri))
         {
             throw new NotFoundHttpException();
         }
@@ -83,7 +83,8 @@ class ListController extends AbstractController{
             'GenreToString' => $genre,
             'pagination' => $pagination,
             'typesGenre' => $typesGenre,
-            'typesSousGenre' => $typesSousGenre
+            'typesSousGenre' => $typesSousGenre,
+            'tri' => $tri
         ]);
     }
 
@@ -138,16 +139,16 @@ class ListController extends AbstractController{
     }
 
     /**
-     * @Route("/liste/{genre}/{sousGenre}/{page}", name="listeBDSousGenre")
+     * @Route("/liste/{genre}/{sousGenre}/{page}/{tri}", name="listeBDSousGenre")
      */
 
-    public function listeBDSousGenre($genre, $sousGenre, $page, BDSousGenreHandler $BDSousGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre)
+    public function listeBDSousGenre($genre, $sousGenre, $page, BDSousGenreHandler $BDSousGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri)
     {
         /* Récupère la liste des BD selon un genre et un sous genre */
 
         /* Crée un système de pagination avec 5 BD par page */
 
-        $bandeDessinees = $BDSousGenreHandler->handle(new BDSousGenreQuery($page, $nbArticlesParPage, $genre, $sousGenre)); // Récupère les BD
+        $bandeDessinees = $BDSousGenreHandler->handle(new BDSousGenreQuery($page, $nbArticlesParPage, $genre, $sousGenre, $tri)); // Récupère les BD
 
         // Permet d'afficher le genre consulté
         $genreToString = $genre;
@@ -155,7 +156,7 @@ class ListController extends AbstractController{
         $genreToString .= $sousGenre;
 
         // Si mauvais paramètre de route : 404
-        if(!in_array($genre, $typesGenre) or !in_array($sousGenre, $typesSousGenre))
+        if(!in_array($genre, $typesGenre, $tri) or !in_array($sousGenre, $typesSousGenre, $tri))
         {
             throw new NotFoundHttpException();
         }
@@ -176,7 +177,8 @@ class ListController extends AbstractController{
             'genre' => $genre,
             'sousGenre' => $sousGenre,
             'typesGenre' => $typesGenre,
-            'typesSousGenre' => $typesSousGenre
+            'typesSousGenre' => $typesSousGenre,
+            'tri' => $tri
         ]);
     }
 

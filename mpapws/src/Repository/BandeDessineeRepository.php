@@ -75,30 +75,132 @@ class BandeDessineeRepository extends ServiceEntityRepository
         }
 
         /*Repository lié à la page toutes les BD d'un genre */
-    public function getBDGenrePagination($page, $nbMaxParPage, $genre)
+    /*Repository lié à la page toutes les BD d'un genre */
+    public function getBDGenrePagination($page, $nbMaxParPage, $genre, $tri)
     {
 
-        $QueryBuilder = $this->createQueryBuilder('BD')
-            ->where('BD.Genre = :genre')
-            ->orderBy('BD.DateDeParution', 'DESC')
-            ->setParameter('genre', $genre);
+        if ($tri == "pos") {
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->orderBy('BD.NoteMoyenne', 'DESC')
+                ->setParameter('genre', $genre);
 
-        $BandeDessinees = $QueryBuilder->getQuery();
+            $BandeDessinees = $QueryBuilder->getQuery();
 
-        $premierResultat = ($page - 1) * $nbMaxParPage;
-        $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
-        $paginator = new Paginator($BandeDessinees);
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
 
-        if ( ($paginator->count() <= $premierResultat) && $page != 1) {
-            throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+        if ($tri == "old" ) {
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->orderBy('BD.DateDeParution', 'DESC')
+                ->setParameter('genre', $genre);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+        if ($tri == "new" || $tri == "def") {
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->orderBy('BD.DateDeParution', 'ASC')
+                ->setParameter('genre', $genre);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
         }
 
-        return $paginator;
     }
 
     /* Repository lié à la page toutes les BD d'un sous genre */
-    public function getBDSousGenrePagination($page, $nbMaxParPage, $genre, $sousGenre)
+    public function getBDSousGenrePagination($page, $nbMaxParPage, $genre, $sousGenre, $tri)
     {
+        if ($tri == "pos"){
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->andWhere('BD.SousGenre = :sousGenre')
+                ->orderBy('BD.NoteMoyenne', 'DESC')
+                ->setParameter('genre', $genre)
+                ->setParameter('sousGenre', $sousGenre);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if ( ($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+
+        if ($tri == "new" || $tri =="def"){
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->andWhere('BD.SousGenre = :sousGenre')
+                ->orderBy('BD.DateDeParution', 'ASC')
+                ->setParameter('genre', $genre)
+                ->setParameter('sousGenre', $sousGenre);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if ( ($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+
+        if ($tri == "old"){
+            $QueryBuilder = $this->createQueryBuilder('BD')
+                ->where('BD.Genre = :genre')
+                ->andWhere('BD.SousGenre = :sousGenre')
+                ->orderBy('BD.DateDeParution', 'DESC')
+                ->setParameter('genre', $genre)
+                ->setParameter('sousGenre', $sousGenre);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if ( ($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
 
         $QueryBuilder = $this->createQueryBuilder('BD')
             ->where('BD.Genre = :genre')

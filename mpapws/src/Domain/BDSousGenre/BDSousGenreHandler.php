@@ -20,6 +20,6 @@ class BDSousGenreHandler
 
     public function handle(BDSousGenreQuery $Query) : ?iterable
     {
-        return $this->repository->getBDSousGenrePagination($Query->page, $Query->nbPage, $Query->genre, $Query->sousGenre);
+        return $this->repository->getBDSousGenrePagination($Query->page, $Query->nbPage, $Query->genre, $Query->sousGenre, $Query->tri);
     }
 }

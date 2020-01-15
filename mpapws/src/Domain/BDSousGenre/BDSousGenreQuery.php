@@ -8,12 +8,14 @@ class BDSousGenreQuery
     public $nbPage;
     public $genre;
     public $sousGenre;
+    public $tri;
 
-    public function __construct($page, $nbPage, $genre, $sousGenre)
+    public function __construct($page, $nbPage, $genre, $sousGenre, $tri)
     {
         $this->page = $page;
         $this->nbPage = $nbPage;
         $this->genre = $genre;
         $this->sousGenre = $sousGenre;
+        $this->tri = $tri;
     }
 }

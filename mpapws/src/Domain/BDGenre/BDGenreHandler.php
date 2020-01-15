@@ -20,6 +20,6 @@ class BDGenreHandler
 
     public function handle(BDGenreQuery $Query) : ?iterable
     {
-        return $this->repository->getBDGenrePagination($Query->page, $Query->nbPage, $Query->genre);
+        return $this->repository->getBDGenrePagination($Query->page, $Query->nbPage, $Query->genre, $Query->tri);
     }
 }
