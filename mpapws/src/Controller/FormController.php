@@ -59,14 +59,16 @@ class FormController extends AbstractController{
         $form = $this->createFormBuilder($BD)
             ->add('titre', TextType::class,['label'  => 'Titre du livre',])
             ->add('auteur', TextType::class, ['label'  => 'Auteur',])
-            ->add('description', TextType::class,['label'  => 'Description',])
+            ->add('description', TextareaType::class,['label'  => 'Description' , 'attr' => [
+                'size' => "100"]
+            ])
             ->add('genre', ChoiceType::class, [
                 'choices' => $typesGenreTab,]
                 , ['label'  => 'Genre',])
             ->add('sousGenre', ChoiceType::class, [
                 'choices' => $typesSousGenreTab,
                 ], ['label'  => 'Sous-genre',])
-            ->add('LivrePDF', FileType::class, ['label'  => 'Livre au format PDF (Taille maximum autorisée : 100mo)', 'mapped' => false, 'required' => false, 'constraints' => [
+            ->add('LivrePDF', FileType::class, ['label'  => 'Livre au format PDF (Taille maximum autorisée : 100 mo)', 'mapped' => false, 'required' => false, 'constraints' => [
                 new File([
                     'maxSize' => '100M',
                     'mimeTypes' => [ 'application/pdf', 'application/x-pdf'],
@@ -75,12 +77,13 @@ class FormController extends AbstractController{
                     'uploadFormSizeErrorMessage' => 'Votre BD dépasse la taille maximum autorisée, veuillez faire un tome 2 et uploader un fichier plus léger !'])
                 ]
             ])
-            ->add('save', SubmitType::class, ['label'  => 'Envoyer !',])
+            ->add('save', SubmitType::class, [
+                'label'  => 'Envoyer'
+            ])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             $BD = $form->getData();
 
@@ -112,7 +115,6 @@ class FormController extends AbstractController{
                 }
             }
 
-            //exec("convert './data/' . $BD->getId() .'/livre.pdf'[0] './data/' . $BD->getId() .'/affiche.jpg';
             return $this->render('pages/task_success.html.twig', [
                 'BandeDessinee'=> $BD,
                 'typesGenre' => $typesGenre,

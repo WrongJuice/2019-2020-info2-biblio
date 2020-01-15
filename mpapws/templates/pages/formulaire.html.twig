@@ -1,7 +1,37 @@
 {%  extends 'base.html.twig' %}
 
 {% block body  %}
-    {{ form(form) }}
+
+        <h1 style="text-align: center; margin-top: 1em; color : #1089FF; font-size: 38pt">Mettre en ligne une BD</h1>
+        <h2 style="margin-top: 3em; font-size: 18pt">Veuillez compléter le formulaire et cliquer sur "Valider"</h2>
+        <hr>
+        <div style="margin-bottom: 1em" class="row">
+                <div class="form-gauche col-sm-6">
+                        {{ form_start(form) }}
+                        {{ form_row(form.titre) }}
+                        <br>
+                        {{ form_row(form.auteur) }}
+                        <br>
+                        <div class="description-UploadFichier" style=".custom-file::after{content: 'blabla';}">
+                                {{ form_row(form.description) }}
+                        </div>
+                </div>
+                <div class="form-droite col-sm-6">
+                        {{ form_row(form.genre) }}
+                        <br>
+                        {{ form_row(form.sousGenre) }}
+                        <br>
+                        {{ form_row(form.LivrePDF) }}
+                </div>
+        </div>
+        <hr>
+        <div class="row">
+                <div style="margin: auto">
+                        {{ form_row(form.save) }}
+                        {{ form_end(form) }}
+                </div>
+        </div>
+
 
     <style>
         select optgroup {
@@ -16,4 +46,5 @@
 
 
     </style>
+
 {% endblock %}
