@@ -42,14 +42,14 @@ p.bd-ajouter{
     margin: 0;
 }
 
-.bd-ajouter{
-    color: black;
+button.btn.btn-light:hover{
+    color: #1089FF;
     text-decoration: none;
     transition: 0.3s;
 }
 
-.bd-ajouter:hover{
-    color: #1089FF;
+button.btn.btn-light{
+    color: black;
     text-decoration: none;
     transition: 0.3s;
 }
