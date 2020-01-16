@@ -52,7 +52,7 @@
 
         {% block body %}
         {% endblock %}
-        
+
         {# Ajout d'une zone de pagination pour les pages si besoin est#}
         {# 3 Types de redirection selon si c'est une liste Tendance, Sous-Genre ou Genre #}
     {% if pagination.nbPages is defined and pagination.nbPages > 1 and (( BandeDessinees is defined and BandeDessinees is not empty ) or ( BDTendances is defined and BDTendances is not empty )) %}
