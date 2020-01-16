@@ -29,7 +29,7 @@
                     <div class="dropdown-menu header-sousmenu" aria-labelledby="navbarDropdown" >
                         {% for typeSousGenre in typesSousGenre %}
                         <a class="dropdown-item text-light" href="{{ path('listeBDSousGenre', {'genre' : typeGenre, 'sousGenre' : typeSousGenre, 'page' : '1', 'tri': 'def' }) }}" >{{ typeSousGenre }}</a>
-                        {% endfor %}S
+                        {% endfor %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-light" href="{{ path('listeBDTendances', {'genre' : typeGenre, 'page' : '1' }) }}">Les tendances </a>
                         <a class="dropdown-item text-light" href="{{ path('listeBDGenre', {'genre' : typeGenre, 'page' : '1', 'tri': 'def' }) }}">Voir tout </a>

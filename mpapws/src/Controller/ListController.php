@@ -81,6 +81,7 @@ class ListController extends AbstractController{
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
             'GenreToString' => $genre,
+            'genre' => $genre,
             'pagination' => $pagination,
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,

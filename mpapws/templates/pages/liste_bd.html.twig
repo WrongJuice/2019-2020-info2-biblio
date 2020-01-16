@@ -1,14 +1,10 @@
 {%  extends 'base.html.twig' %}
 
-
 {% block body  %}
 
-    {% if BandeDessinees is not empty %}
         <br/>
         <h2 class="text-center liste-title"> Vous consultez la liste des {{ GenreToString }}</h2>
         <br/>
-    {% endif %}
-
 
     {# SI LA PAGINATION EXISTE#}
 
@@ -16,30 +12,30 @@
 
         {% if sousGenre is defined %}
 
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "new"  }) }}'" class="tri">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "old"  }) }}'" class="tri">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "pos"  }) }}'" class="tri">Le vote du public</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
 
         {% else %}
 
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="tri">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="tri">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="tri">Le vote du public</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
 
         {% endif %}
     {% else %}
 
         {% if sousGenre is defined %}
 
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "new"  }) }}'" class="tri">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "old"  }) }}'" class="tri">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "pos"  }) }}'" class="tri">Le vote du public</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
 
         {% else %}
 
-            <button type="button" onclick="window.location.href='{{ path('listeBDSGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="tri">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "old"  }) }}'" class="tri">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "pos"  }) }}'" class="tri">Le vote du public</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDSGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
+            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
 
         {% endif %}
     {% endif %}
