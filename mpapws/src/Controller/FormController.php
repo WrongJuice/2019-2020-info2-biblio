@@ -75,7 +75,8 @@ class FormController extends AbstractController{
                     'mimeTypesMessage' => 'Nan mais sérieux quoi, veuillez uploader un fichier pdf valide !',
                     'uploadIniSizeErrorMessage' => 'Votre BD dépasse la taille maximum autorisée, veuillez faire un tome 2 et uploader un fichier plus léger !',
                     'uploadFormSizeErrorMessage' => 'Votre BD dépasse la taille maximum autorisée, veuillez faire un tome 2 et uploader un fichier plus léger !'])
-                ]
+                ],
+                'attr' => ['accept' => "application/pdf"]
             ])
             ->add('save', SubmitType::class, [
                 'label'  => 'Envoyer'
