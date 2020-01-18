@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Domain\BandeDessineeInterface;
 use App\Entity\BandeDessinee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @method BandeDessinee[]    findAll()
  * @method BandeDessinee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BandeDessineeRepository extends ServiceEntityRepository
+class BandeDessineeRepository extends ServiceEntityRepository implements  BandeDessineeInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
