@@ -83,6 +83,23 @@ class FormController extends AbstractController{
             ])
             ->getForm();
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -119,11 +136,13 @@ class FormController extends AbstractController{
             return $this->render('pages/task_success.html.twig', [
                 'BandeDessinee'=> $BD,
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView(),
             ]);
         }
         return $this->render('pages/formulaire.html.twig', [
             'form'=> $form->createView(),
+            'formSearch' => $formSearch->createView(),
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre
         ]);

@@ -223,4 +223,26 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
         return $paginator;
     }
 
+    public function getBDDepuisRecherche($recherche, $page, $nbMaxParPage)
+    {
+        /* Récupère les BD selon une recherche*/
+
+        $QueryBuilder = $this->createQueryBuilder("BD")
+            ->where('BD.Titre = :recherche')
+            ->orderBy('BD.NoteMoyenne', 'DESC')
+            ->setParameter('recherche', $recherche);
+
+        $BandeDessinees = $QueryBuilder->getQuery();
+
+        $premierResultat = ($page - 1) * $nbMaxParPage;
+        $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+        $paginator = new Paginator($BandeDessinees);
+
+        if ( ($paginator->count() <= $premierResultat) && $page != 1) {
+            throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+        }
+
+        return $paginator;
+    }
+
 }
