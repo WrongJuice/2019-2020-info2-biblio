@@ -23,7 +23,7 @@ class SearchController extends AbstractController
         $pagination = array(
             'page' => $page,
             'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
-            'nomRoute' => 'listeBDGenre',
+            'nomRoute' => 'handleSearch',
             'paramsRoute' => array()
         );
 

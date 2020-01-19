@@ -121,7 +121,7 @@
                     </li>
                 {% endif %}
             </ul>
-        {% elseif GenreToString is defined %}
+        {% elseif genre is defined %}
             <ul class="pagination justify-content-center">
                 {% if pagination.page > 1 %}
                     <li>
@@ -150,8 +150,36 @@
                     </li>
                 {% endif %}
             </ul>
-        {% endif %}
+        {% else %}
+            <ul class="pagination justify-content-center">
+                {% if pagination.page > 1 %}
+                    <li>
+                        <a href="{{ path(pagination.nomRoute,
+                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': GenreToString, 'tri': tri, 'query': query })) }}" class="pagination-part pagination-arrow">
+                            <img src="/img/back_pagination.png" alt="flèche retour">
+                        </a>
+                    </li>
+                {% endif %}
 
+                {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
+                {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
+                    <li {% if p == pagination.page %}class="pagination-active"{% endif %}>
+                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': GenreToString, 'tri': tri, 'query': query})) }}" class="pagination-part">
+                            {{ p }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+                {% if pagination.page < pagination.nbPages %}
+                    <li>
+                        <a href="{{ path(pagination.nomRoute,
+                            pagination.paramsRoute|merge({'page': pagination.page+1, 'genre': GenreToString, 'tri': tri, 'query': query })) }}" class="pagination-part pagination-arrow">
+                            <img src="/img/next_pagination.png" alt="flèche suivant">
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
     {% endif %}
 
     </div>

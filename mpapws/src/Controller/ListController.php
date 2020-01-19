@@ -194,6 +194,13 @@ class ListController extends AbstractController{
 
         $bandeDessinees = $BDSousGenreHandler->handle(new BDSousGenreQuery($page, $nbArticlesParPage, $genre, $sousGenre, $tri)); // Récupère les BD
 
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
+            'nomRoute' => 'listeBDSousGenre',
+            'paramsRoute' => array()
+        );
+
         // Permet d'afficher le genre consulté
         $genreToString = $genre;
         $genreToString .= ' ';
@@ -245,7 +252,8 @@ class ListController extends AbstractController{
             'typesSousGenre' => $typesSousGenre,
             'tri' => $tri,
             'formSearch' => $formSearch->createView(),
-            'nbResultats' => $nbResultats
+            'nbResultats' => $nbResultats,
+            'pagination' => $pagination
         ]);
     }
 

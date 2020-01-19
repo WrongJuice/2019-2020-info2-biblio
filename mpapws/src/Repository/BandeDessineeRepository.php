@@ -249,11 +249,11 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
 
         if ($tri == "old") {
             $QueryBuilder = $this->createQueryBuilder("BD")
-                ->where('BD.Titre = :recherche')
-                ->orWhere('BD.Auteur = :recherche')
-                ->orWhere('BD.Description = :recherche')
+                ->where('LOWER(BD.Titre) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Auteur) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Description) LIKE LOWER(:recherche)')
                 ->orderBy('BD.DateDeParution', 'ASC')
-                ->setParameter('recherche', $recherche);
+                ->setParameter('recherche', '%'.$recherche.'%');
 
             $BandeDessinees = $QueryBuilder->getQuery();
 
@@ -270,11 +270,11 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
 
         if ($tri == "pos") {
             $QueryBuilder = $this->createQueryBuilder("BD")
-                ->where('BD.Titre = :recherche')
-                ->orWhere('BD.Auteur = :recherche')
-                ->orWhere('BD.Description = :recherche')
+                ->where('LOWER(BD.Titre) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Auteur) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Description) LIKE LOWER(:recherche)')
                 ->orderBy('BD.NoteMoyenne', 'DESC')
-                ->setParameter('recherche', $recherche);
+                ->setParameter('recherche', '%'.$recherche.'%');
 
             $BandeDessinees = $QueryBuilder->getQuery();
 
