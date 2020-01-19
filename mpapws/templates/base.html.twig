@@ -39,11 +39,17 @@
 
             </ul>
 
-            <button type="button" class="btn btn-light" style="margin-right: 30px;" onclick="location.href='http://mpapws.loc:9999/formulaire'"><p class="bd-ajouter">Ajouter votre BD</p></button>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Cherchez une BD" aria-label="Search">
-                <button id="search-button" class="btn btn-outline-light my-2 my-sm-0" type="submit"> <img id="search-icon" src="/img/search.png"></button>
-            </form>
+            <button type="button" class="btn btn-light" style="margin-right: 30px;" onclick="location.href='{{ path('formulaire') }}'"><p class="bd-ajouter">Ajouter votre BD</p></button>
+            {{ form_start(formSearch) }}
+            <div style="display: flex">
+                <div style="margin-right: 10px">
+                    {{ form_widget(formSearch.query) }}
+                </div>
+                <div>
+                    {{ form_widget(formSearch.rechercher) }}
+                </div>
+            </div>
+            {{ form_end(formSearch) }}
         </div>
     </nav>
 
@@ -70,7 +76,7 @@
                 {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
                 {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
                     <li {% if p == pagination.page %}class="pagination-active"{% endif %}>
-                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': genre})) }}" class="pagination-part">
+                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p, 'genre': genre, 'tri': tri})) }}" class="pagination-part">
                             {{ p }}
                         </a>
                     </li>
@@ -120,7 +126,7 @@
                 {% if pagination.page > 1 %}
                     <li>
                         <a href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': GenreToString })) }}" class="pagination-part pagination-arrow">
+                            pagination.paramsRoute|merge({'page': pagination.page-1, 'genre': GenreToString, 'tri': tri })) }}" class="pagination-part pagination-arrow">
                             <img src="/img/back_pagination.png" alt="flèche retour">
                         </a>
                     </li>

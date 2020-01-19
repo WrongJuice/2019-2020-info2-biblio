@@ -46,7 +46,7 @@ class ListController extends AbstractController{
      * @Route("/liste/{genre}/{page}/{tri}", requirements={"page" = "\d+"}, name="listeBDGenre")
      */
 
-    public function listeBDGenre($genre, $page, BDGenreHandler $BDGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri)
+    public function listeBDGenre($genre, $page, BDGenreHandler $BDGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri, Request $request)
     {
         /* Récupère la liste des BD selon un genre */
 
@@ -61,6 +61,23 @@ class ListController extends AbstractController{
             'paramsRoute' => array()
         );
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
+
         // Si mauvais paramètre de route : 404
         if(!in_array($genre, $typesGenre, $tri))
         {
@@ -73,10 +90,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
@@ -85,7 +105,9 @@ class ListController extends AbstractController{
             'pagination' => $pagination,
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
-            'tri' => $tri
+            'tri' => $tri,
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 
@@ -93,7 +115,7 @@ class ListController extends AbstractController{
      * @Route("/liste/{genre}/Tendances/{page}", name="listeBDTendances")
      */
 
-    public function listeBDTendances($genre, $page, BDTendanceHandler $BDTendanceHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre)
+    public function listeBDTendances($genre, $page, BDTendanceHandler $BDTendanceHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, Request $request)
     {
         /* Récupère la liste des BD Recentes selon un genre */
 
@@ -108,6 +130,22 @@ class ListController extends AbstractController{
             'paramsRoute' => array()
         );
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
 
         // Permet d'afficher le genre consulté
         $genreToString = $genre;
@@ -124,10 +162,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($BDTendances);
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $BDTendances,
@@ -135,7 +176,9 @@ class ListController extends AbstractController{
             'genre' => $genre,
             'pagination' => $pagination,
             'typesGenre' => $typesGenre,
-            'typesSousGenre' => $typesSousGenre
+            'typesSousGenre' => $typesSousGenre,
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 
@@ -143,7 +186,7 @@ class ListController extends AbstractController{
      * @Route("/liste/{genre}/{sousGenre}/{page}/{tri}", name="listeBDSousGenre")
      */
 
-    public function listeBDSousGenre($genre, $sousGenre, $page, BDSousGenreHandler $BDSousGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri)
+    public function listeBDSousGenre($genre, $sousGenre, $page, BDSousGenreHandler $BDSousGenreHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, $tri, Request $request)
     {
         /* Récupère la liste des BD selon un genre et un sous genre */
 
@@ -156,6 +199,23 @@ class ListController extends AbstractController{
         $genreToString .= ' ';
         $genreToString .= $sousGenre;
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
+
         // Si mauvais paramètre de route : 404
         if(!in_array($genre, $typesGenre, $tri) or !in_array($sousGenre, $typesSousGenre, $tri))
         {
@@ -167,9 +227,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
+
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         // Si il y une BD : Retourne sur la page liste_bd
         return $this->render('pages/liste_bd.html.twig', [
@@ -179,7 +243,9 @@ class ListController extends AbstractController{
             'sousGenre' => $sousGenre,
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
-            'tri' => $tri
+            'tri' => $tri,
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 

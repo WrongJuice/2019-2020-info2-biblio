@@ -36,7 +36,7 @@ class HomeController extends AbstractController{
     }
 
 
-    public function index($typesGenre, $typesSousGenre, BDTendanceHomeHandler $BDTendanceHomeHandler):Response{
+    public function index($typesGenre, $typesSousGenre, BDTendanceHomeHandler $BDTendanceHomeHandler, Request $request):Response{
 
         /* Récupère les BD Recentes grâce au Handler */
 
@@ -50,12 +50,30 @@ class HomeController extends AbstractController{
 
         $comicsTendances = $BDTendanceHomeHandler->handle(new BDTendanceHomeQuery('Comics')); // Récupère les Comics Tendances
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
+
         return $this->render('pages/home.html.twig', [
             'BDTendances' => $BDTendances,
             'MangasTendances' => $mangasTendances,
             'ComicsTendances' => $comicsTendances,
             'typesGenre' => $typesGenre,
-            'typesSousGenre' => $typesSousGenre
+            'typesSousGenre' => $typesSousGenre,
+            'formSearch' => $formSearch->createView()
         ]);
     }
 

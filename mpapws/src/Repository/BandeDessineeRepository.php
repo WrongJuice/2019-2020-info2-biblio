@@ -101,7 +101,7 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
         if ($tri == "old" ) {
             $QueryBuilder = $this->createQueryBuilder('BD')
                 ->where('BD.Genre = :genre')
-                ->orderBy('BD.DateDeParution', 'DESC')
+                ->orderBy('BD.DateDeParution', 'ASC')
                 ->setParameter('genre', $genre);
 
             $BandeDessinees = $QueryBuilder->getQuery();
@@ -119,7 +119,7 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
         if ($tri == "new" || $tri == "def") {
             $QueryBuilder = $this->createQueryBuilder('BD')
                 ->where('BD.Genre = :genre')
-                ->orderBy('BD.DateDeParution', 'ASC')
+                ->orderBy('BD.DateDeParution', 'DESC')
                 ->setParameter('genre', $genre);
 
             $BandeDessinees = $QueryBuilder->getQuery();
@@ -161,11 +161,11 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
             return $paginator;
         }
 
-        if ($tri == "new" || $tri =="def"){
+        if ($tri == "new" || $tri == "def"){
             $QueryBuilder = $this->createQueryBuilder('BD')
                 ->where('BD.Genre = :genre')
                 ->andWhere('BD.SousGenre = :sousGenre')
-                ->orderBy('BD.DateDeParution', 'ASC')
+                ->orderBy('BD.DateDeParution', 'DESC')
                 ->setParameter('genre', $genre)
                 ->setParameter('sousGenre', $sousGenre);
 
@@ -186,7 +186,7 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
             $QueryBuilder = $this->createQueryBuilder('BD')
                 ->where('BD.Genre = :genre')
                 ->andWhere('BD.SousGenre = :sousGenre')
-                ->orderBy('BD.DateDeParution', 'DESC')
+                ->orderBy('BD.DateDeParution', 'ASC')
                 ->setParameter('genre', $genre)
                 ->setParameter('sousGenre', $sousGenre);
 
@@ -221,6 +221,73 @@ class BandeDessineeRepository extends ServiceEntityRepository implements  BandeD
         }
 
         return $paginator;
+    }
+
+    public function getBDDepuisRecherche($recherche, $page, $nbMaxParPage, $tri)
+    {
+        /* Récupère les BD selon une recherche*/
+        if ($tri == "new" || $tri == "def") {
+            $QueryBuilder = $this->createQueryBuilder("BD")
+                ->where('LOWER(BD.Titre) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Auteur) LIKE LOWER(:recherche)')
+                ->orWhere('LOWER(BD.Description) LIKE LOWER(:recherche)')
+                ->orderBy('BD.DateDeParution', 'DESC')
+                ->setParameter('recherche', '%'.$recherche.'%');
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+
+        if ($tri == "old") {
+            $QueryBuilder = $this->createQueryBuilder("BD")
+                ->where('BD.Titre = :recherche')
+                ->orWhere('BD.Auteur = :recherche')
+                ->orWhere('BD.Description = :recherche')
+                ->orderBy('BD.DateDeParution', 'ASC')
+                ->setParameter('recherche', $recherche);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
+
+        if ($tri == "pos") {
+            $QueryBuilder = $this->createQueryBuilder("BD")
+                ->where('BD.Titre = :recherche')
+                ->orWhere('BD.Auteur = :recherche')
+                ->orWhere('BD.Description = :recherche')
+                ->orderBy('BD.NoteMoyenne', 'DESC')
+                ->setParameter('recherche', $recherche);
+
+            $BandeDessinees = $QueryBuilder->getQuery();
+
+            $premierResultat = ($page - 1) * $nbMaxParPage;
+            $BandeDessinees->setFirstResult($premierResultat)->setMaxResults($nbMaxParPage);
+            $paginator = new Paginator($BandeDessinees);
+
+            if (($paginator->count() <= $premierResultat) && $page != 1) {
+                throw new NotFoundHttpException('La page demandée n\'existe pas.'); // page 404, sauf pour la première page
+            }
+
+            return $paginator;
+        }
     }
 
 }
