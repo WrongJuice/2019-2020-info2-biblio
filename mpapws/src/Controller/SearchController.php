@@ -18,7 +18,7 @@ class SearchController extends AbstractController
 
         $nbArticlesParPage = 5;
         $repository = $this->getDoctrine()->getManager()->getRepository('App\Entity\BandeDessinee');
-        $bandeDessinees = $repository->getBDDepuisRecherche($query, $page, $nbArticlesParPage);
+        $bandeDessinees = $repository->getBDDepuisRecherche($query, $page, $nbArticlesParPage, $tri);
 
         $pagination = array(
             'page' => $page,
@@ -44,9 +44,21 @@ class SearchController extends AbstractController
 
             return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $query, 'tri' => 'def']);
         }
-        $genreToString = "oeuvres avec ";
+        $genreToString = "résultats de la recherche pour : ";
         $genreToString .= $query;
-        $genreToString .= " dans son titre";
+
+        // Si il n'y à pas de BD : Retourne sur la page no_result
+        if (count($bandeDessinees) == 0)
+        {
+            return $this->render('pages/no_result.html.twig', [
+                'typesGenre' => $typesGenre,
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
+            ]);
+        }
+
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
@@ -55,8 +67,9 @@ class SearchController extends AbstractController
             'query' => $query,
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
-            'formSearch' => $formSearch->createView()
-            // envoyer nb resultat
+            'formSearch' => $formSearch->createView(),
+            'tri' => $tri,
+            'nbResultats' => $nbResultats
         ]);
     }
 }

@@ -122,6 +122,23 @@ class DetailController extends AbstractController{
 
         $formNote->handleRequest($request);
 
+        $formSearch = $this->createFormBuilder()
+            ->add('query', TextType::class)
+            ->add('rechercher', SubmitType::class, [
+                'attr' => [
+                    'class' => "btn btn-outline-light"
+                ]
+            ])
+            ->getForm();
+
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $motCle = $formSearch->getData()['query'];
+
+            return $this->redirectToRoute('handleSearch', ['page' => '1', 'query' => $motCle, 'tri' => 'def']);
+        }
+
         /* Si la note envoyé, recharge la page */
         if ($formNote->isSubmitted() && $formNote->isValid()) {
 
@@ -144,7 +161,8 @@ class DetailController extends AbstractController{
             'nbCommentaires' => $nbCommentaires,
             'Planches' => $planches,
             'typesGenre' => $typesGenre,
-            'typesSousGenre' => $typesSousGenre
+            'typesSousGenre' => $typesSousGenre,
+            'formSearch' => $formSearch->createView()
         ]);
     }
 

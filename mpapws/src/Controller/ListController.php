@@ -90,10 +90,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
@@ -103,7 +106,8 @@ class ListController extends AbstractController{
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
             'tri' => $tri,
-            'formSearch' => $formSearch->createView()
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 
@@ -158,10 +162,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($BDTendances);
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $BDTendances,
@@ -170,7 +177,8 @@ class ListController extends AbstractController{
             'pagination' => $pagination,
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
-            'formSearch' => $formSearch->createView()
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 
@@ -219,9 +227,13 @@ class ListController extends AbstractController{
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
-                'typesSousGenre' => $typesSousGenre
+                'typesSousGenre' => $typesSousGenre,
+                'formSearch' => $formSearch->createView()
             ]);
         }
+
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         // Si il y une BD : Retourne sur la page liste_bd
         return $this->render('pages/liste_bd.html.twig', [
@@ -232,7 +244,8 @@ class ListController extends AbstractController{
             'typesGenre' => $typesGenre,
             'typesSousGenre' => $typesSousGenre,
             'tri' => $tri,
-            'formSearch' => $formSearch->createView()
+            'formSearch' => $formSearch->createView(),
+            'nbResultats' => $nbResultats
         ]);
     }
 
