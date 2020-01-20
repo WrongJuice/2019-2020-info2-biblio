@@ -20,6 +20,6 @@ class BDTendanceHandler
 
     public function handle(BDTendanceQuery $Query) : ?iterable
     {
-        return $this->repository->getBDTendancesPagination($Query->page, $Query->nbPage, $Query->genre);
+        return $this->repository->getBDTendancesPagination($Query->page, $Query->nbPage, $Query->genre, $Query->tri);
     }
 }

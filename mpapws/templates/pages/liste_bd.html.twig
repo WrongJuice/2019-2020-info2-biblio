@@ -6,31 +6,9 @@
         <h3 class="text-center liste-title"> Vous consultez la liste des {{ GenreToString }} ({{ nbResultats }} résultats trouvés)</h3>
         <br/>
 
-        {% if 'Tendances' in GenreToString %}
-
-            <button type="button" onclick="window.location.href='{{ path('listeBDTendances', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDTendances', {'page': '1', 'genre': genre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDTendances', {'page': '1', 'genre': genre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
-
-        {% elseif sousGenre is defined %}
-
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDSousGenre', {'page': '1', 'genre': genre, 'sousGenre' : sousGenre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
-
-        {% elseif genre is defined%}
-
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('listeBDGenre', {'page': '1', 'genre': genre, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
-
-        {% else %}
-
-            <button type="button" onclick="window.location.href='{{ path('handleSearch', {'page': '1', 'query' : query, 'tri' : "new"  }) }}'" class="btn btn-primary">Les plus récents</button>
-            <button type="button" onclick="window.location.href='{{ path('handleSearch', {'page': '1', 'query' : query, 'tri' : "old"  }) }}'" class="btn btn-primary">Les plus anciens</button>
-            <button type="button" onclick="window.location.href='{{ path('handleSearch', {'page': '1', 'query': query, 'tri' : "pos"  }) }}'" class="btn btn-primary">Le vote du public</button>
-
-        {% endif %}
+            <button type="button" onclick="window.location.href='{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': '1', 'tri' : "new"  })) }}'" class="btn btn-primary">Les plus récents</button>
+            <button type="button" onclick="window.location.href='{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': '1', 'tri' : "old"  })) }}'" class="btn btn-primary">Les plus anciens</button>
+            <button type="button" onclick="window.location.href='{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': '1', 'tri' : "pos"  })) }}'" class="btn btn-primary">Le vote du public</button>
 
     <ul class="list-unstyled">
         {% set i = 0 %}
@@ -55,7 +33,38 @@
         {% endfor %}
     </ul>
 
+    {# Ajout d'une zone de pagination pour les pages si besoin est#}
+    {# 3 Types de redirection selon si c'est une liste Tendance, Sous-Genre ou Genre #}
+    {% if pagination.nbPages is defined and pagination.nbPages > 1 and (( BandeDessinees is defined and BandeDessinees is not empty ) or ( BDTendances is defined and BDTendances is not empty )) %}
+        <ul class="pagination justify-content-center">
+            {% if pagination.page > 1 %}
+                <li>
+                    <a href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page-1 })) }}" class="pagination-part pagination-arrow">
+                        <img src="/img/back_pagination.png" alt="flèche retour">
+                    </a>
+                </li>
+            {% endif %}
 
+            {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
+            {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
+                <li {% if p == pagination.page %}class="pagination-active"{% endif %}>
+                    <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'page': p})) }}" class="pagination-part">
+                        {{ p }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if pagination.page < pagination.nbPages %}
+                <li>
+                    <a href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page+1})) }}" class="pagination-part pagination-arrow">
+                        <img src="/img/next_pagination.png" alt="flèche suivant">
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
 
 
 {% endblock %}
