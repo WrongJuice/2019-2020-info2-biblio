@@ -42,7 +42,6 @@ class DetailController extends AbstractController{
     public function BDDetaillee($id, Request $request, EntityManagerInterface $entityManager, BDDetailHandler $BDDetailHandler, $typesGenre, $typesSousGenre)
     {
         /*Récupère les infos de la BD */
-        $repository = $this->getDoctrine()->getRepository('App\Entity\BandeDessinee');
         $bandeDessinee = $BDDetailHandler->handle(new BDDetailQuery($id));
 
         /* Ajoute les planches seulement si elles existent */

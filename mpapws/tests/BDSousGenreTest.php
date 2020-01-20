@@ -15,10 +15,11 @@ class BDSousGenreTest extends TestCase
         $nbPage = 5;
         $genre = 'BD';
         $sousGenre = 'Humour';
+        $tri = 'def';
 
         $Repository = $this->createMock(\App\Repository\BandeDessineeRepository::class);
         $Repository->expects($this->once())->method('getBDSousGenrePagination');
-        $Query = new BDSousGenreQuery($page, $nbPage, $genre, $sousGenre);
+        $Query = new BDSousGenreQuery($page, $nbPage, $genre, $sousGenre, $tri);
         $Handler = new BDSousGenreHandler($Repository);
 
         $Handler->handle($Query);

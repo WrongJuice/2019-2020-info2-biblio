@@ -14,10 +14,11 @@ class BDGenreTest extends TestCase
         $page = 1;
         $nbPage = 5;
         $genre = 'BD';
+        $tri = 'def';
 
         $Repository = $this->createMock(\App\Repository\BandeDessineeRepository::class);
         $Repository->expects($this->once())->method('getBDGenrePagination');
-        $Query = new BDGenreQuery($page, $nbPage, $genre);
+        $Query = new BDGenreQuery($page, $nbPage, $genre, $tri);
         $Handler = new BDGenreHandler($Repository);
 
         $Handler->handle($Query);

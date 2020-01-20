@@ -14,10 +14,11 @@ class BDTendancesTest extends TestCase
         $page = 1;
         $nbPage = 5;
         $genre = 'BD';
+        $tri = 'def';
 
         $Repository = $this->createMock(\App\Repository\BandeDessineeRepository::class);
         $Repository->expects($this->once())->method('getBDTendancesPagination');
-        $Query = new BDTendanceQuery($page, $nbPage, $genre);
+        $Query = new BDTendanceQuery($page, $nbPage, $genre, $tri);
         $Handler = new BDTendanceHandler($Repository);
 
         $Handler->handle($Query);
