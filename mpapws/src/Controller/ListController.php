@@ -54,12 +54,7 @@ class ListController extends AbstractController{
 
         $bandeDessinees = $BDGenreHandler->handle(new BDGenreQuery($page, $nbArticlesParPage, $genre, $tri)); // Récupère les BD
 
-        $pagination = array(
-            'page' => $page,
-            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
-            'nomRoute' => 'listeBDGenre',
-            'paramsRoute' => array()
-        );
+
 
         $formSearch = $this->createFormBuilder()
             ->add('query', TextType::class)
@@ -84,9 +79,11 @@ class ListController extends AbstractController{
             throw new NotFoundHttpException();
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
 
         // Si il n'y à pas de BD : Retourne sur la page no_result
-        if (count($bandeDessinees) == 0)
+        if ($nbResultats == 0)
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
@@ -95,8 +92,15 @@ class ListController extends AbstractController{
             ]);
         }
 
-        // Calcul du nombre de résultat
-        $nbResultats = count($bandeDessinees);
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
+            'nomRoute' => 'listeBDGenre',
+            'paramsRoute' => array( 'BandeDessinees' => $bandeDessinees,
+                'genre' => $genre,
+                'tri' => $tri,)
+        );
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
@@ -112,23 +116,18 @@ class ListController extends AbstractController{
     }
 
     /**
-     * @Route("/liste/{genre}/Tendances/{page}", name="listeBDTendances")
+     * @Route("/liste/{genre}/Tendances/{page}/{tri}", name="listeBDTendances")
      */
 
-    public function listeBDTendances($genre, $page, BDTendanceHandler $BDTendanceHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, Request $request)
+    public function listeBDTendances($genre, $page, BDTendanceHandler $BDTendanceHandler, $nbArticlesParPage, $typesGenre, $typesSousGenre, Request $request, $tri)
     {
         /* Récupère la liste des BD Recentes selon un genre */
 
         /* Crée un système de pagination avec 5 BD par page */
 
-        $BDTendances = $BDTendanceHandler->handle(new BDTendanceQuery($page, $nbArticlesParPage, $genre)); // Récupère les BD Récentes
+        $BDTendances = $BDTendanceHandler->handle(new BDTendanceQuery($page, $nbArticlesParPage, $genre, $tri)); // Récupère les BD Récentes
 
-        $pagination = array(
-            'page' => $page,
-            'nbPages' => ceil(count($BDTendances) / $nbArticlesParPage),
-            'nomRoute' => 'listeBDTendances',
-            'paramsRoute' => array()
-        );
+
 
         $formSearch = $this->createFormBuilder()
             ->add('query', TextType::class)
@@ -157,8 +156,11 @@ class ListController extends AbstractController{
             throw new NotFoundHttpException();
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($BDTendances);
+
         // Si il n'y à pas de BD : Retourne sur la page no_result
-        if (count($BDTendances) == 0)
+        if ($nbResultats == 0)
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
@@ -167,8 +169,14 @@ class ListController extends AbstractController{
             ]);
         }
 
-        // Calcul du nombre de résultat
-        $nbResultats = count($BDTendances);
+
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($BDTendances) / $nbArticlesParPage),
+            'nomRoute' => 'listeBDTendances',
+            'paramsRoute' => array('genre' => $genre, 'tri' => $tri)
+        );
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $BDTendances,
@@ -194,12 +202,7 @@ class ListController extends AbstractController{
 
         $bandeDessinees = $BDSousGenreHandler->handle(new BDSousGenreQuery($page, $nbArticlesParPage, $genre, $sousGenre, $tri)); // Récupère les BD
 
-        $pagination = array(
-            'page' => $page,
-            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
-            'nomRoute' => 'listeBDSousGenre',
-            'paramsRoute' => array()
-        );
+
 
         // Permet d'afficher le genre consulté
         $genreToString = $genre;
@@ -229,8 +232,11 @@ class ListController extends AbstractController{
             throw new NotFoundHttpException();
         }
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
+
         // Si il n'y à pas de BD : Retourne sur la page no_result
-        if (count($bandeDessinees) == 0)
+        if ($nbResultats == 0)
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
@@ -239,8 +245,16 @@ class ListController extends AbstractController{
             ]);
         }
 
-        // Calcul du nombre de résultat
-        $nbResultats = count($bandeDessinees);
+
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
+            'nomRoute' => 'listeBDSousGenre',
+            'paramsRoute' => array('genre' => $genre,
+                'sousGenre' => $sousGenre,
+                'tri' => $tri,)
+        );
 
         // Si il y une BD : Retourne sur la page liste_bd
         return $this->render('pages/liste_bd.html.twig', [

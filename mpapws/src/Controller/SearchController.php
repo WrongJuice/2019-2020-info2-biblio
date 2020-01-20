@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\BandeDessinee;
+use App\Domain\BDSearchBar\BDSearchBarHandler;
+use App\Domain\BDSearchBar\BDSearchBarQuery;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,18 +17,9 @@ class SearchController extends AbstractController
     /**
      * @Route("/rechercher/{query}/{page}/{tri}", name="handleSearch")
      */
-    public function handleSearch($page, $query, Request $request, $typesGenre, $typesSousGenre, $tri) {
+    public function handleSearch($page, $query, Request $request, BDSearchBarHandler $BDSearchBarHandler, $typesGenre, $typesSousGenre, $tri, $nbArticlesParPage) {
 
-        $nbArticlesParPage = 5;
-        $repository = $this->getDoctrine()->getManager()->getRepository('App\Entity\BandeDessinee');
-        $bandeDessinees = $repository->getBDDepuisRecherche($query, $page, $nbArticlesParPage, $tri);
-
-        $pagination = array(
-            'page' => $page,
-            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
-            'nomRoute' => 'handleSearch',
-            'paramsRoute' => array()
-        );
+        $bandeDessinees = $BDSearchBarHandler->handle(new BDSearchBarQuery($page, $nbArticlesParPage, $query, $tri)); // Récupère les BD Récentes
 
         $formSearch = $this->createFormBuilder()
             ->add('query', TextType::class)
@@ -47,8 +41,11 @@ class SearchController extends AbstractController
         $genreToString = "résultats de la recherche pour : ";
         $genreToString .= $query;
 
+        // Calcul du nombre de résultat
+        $nbResultats = count($bandeDessinees);
+
         // Si il n'y à pas de BD : Retourne sur la page no_result
-        if (count($bandeDessinees) == 0)
+        if ($nbResultats == 0)
         {
             return $this->render('pages/no_result.html.twig', [
                 'typesGenre' => $typesGenre,
@@ -57,8 +54,16 @@ class SearchController extends AbstractController
             ]);
         }
 
-        // Calcul du nombre de résultat
-        $nbResultats = count($bandeDessinees);
+
+
+        $pagination = array(
+            'page' => $page,
+            'nbPages' => ceil(count($bandeDessinees) / $nbArticlesParPage),
+            'nomRoute' => 'handleSearch',
+            'paramsRoute' => array('GenreToString' => $genreToString,
+                'query' => $query,
+                'tri' => $tri)
+        );
 
         return $this->render('pages/liste_bd.html.twig', [
             'BandeDessinees' => $bandeDessinees,
