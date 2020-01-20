@@ -101,7 +101,7 @@ class FormController extends AbstractController{
         }
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $form['LivrePDF']->getData() != null) {
 
             $BD = $form->getData();
 
