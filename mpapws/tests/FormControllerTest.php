@@ -25,19 +25,12 @@ class FormControllerTest extends WebTestCase
         $client->followRedirects(true);
         $crawler = $client->request('GET', '/formulaire');
 
-
-
         $book = new UploadedFile(
-            'public/data_test/TP - TS3.pdf',
-            'TP - TS3.pdf',
+            'public/data_test/livre.pdf',
+            'livre.pdf',
             'application/pdf',
             null
         );
-
-        //$form = $crawler->selectButton('Envoyer')->form();
-
-        //$form = $crawler->filter('.formUp')->form();
-        //$form['titre'] = 'BD_de_test';
 
         $crawler = $client->submitForm('Envoyer',
             ['form[titre]' => 'BD_de_test',
@@ -47,11 +40,6 @@ class FormControllerTest extends WebTestCase
             'form[sousGenre]' => 'Aventure',
             'form[LivrePDF]' => $book]
         );
-
-        //$form = $crawler->selectButton('save')->form();
-
-        // set some values
-        //$form['titre'] = 'BD_Test';
 
     }
 
