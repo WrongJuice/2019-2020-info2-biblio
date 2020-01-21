@@ -40,12 +40,12 @@ class FormControllerTest extends WebTestCase
         //$form['titre'] = 'BD_de_test';
 
         $crawler = $client->submitForm('Envoyer',
-            ['titre' => 'BD_de_test',
-            'auteur' => 'Alfred',
-            'description' => 'Ceci est une BD de test',
-            'genre' => 'BD',
-            'sousGenre' => 'Aventure',
-            'LivrePDF' => $book]
+            ['form[titre]' => 'BD_de_test',
+            'form[auteur]' => 'Alfred',
+            'form[description]' => 'Ceci est une BD de test',
+            'form[genre]' => 'BD',
+            'form[sousGenre]' => 'Aventure',
+            'form[LivrePDF]' => $book]
         );
 
         //$form = $crawler->selectButton('save')->form();
